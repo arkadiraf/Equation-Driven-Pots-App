@@ -1472,7 +1472,8 @@ const texturePresets = {
             coreMesh,
             coreValidation: validateMesh(coreMesh),
             surfaceGroups,
-            hasSurface: occ.hasSurface
+            hasSurface: occ.hasSurface,
+            stateCounts: occ.stateCounts ? occ.stateCounts.slice() : [0, 0, 0, 0]
         };
     }
 
@@ -1810,8 +1811,19 @@ const texturePresets = {
         try {
             const cfg = getConfig();
             const parts = buildMultipartMeshes(cfg);
+            const cleanSurfaceGroups = parts.surfaceGroups.every(part =>
+                part.validations.every(v => !v.boundaryEdges && !v.nonManifoldEdges) &&
+                !part.mergedValidation.boundaryEdges &&
+                !part.mergedValidation.nonManifoldEdges
+            );
+
+            const allowCoreEdgeCase =
+                parts.coreValidation.boundaryEdges === 0 &&
+                parts.coreValidation.nonManifoldEdges > 0 &&
+                cleanSurfaceGroups;
+
             const blockingIssues = [];
-            if (parts.coreValidation.boundaryEdges || parts.coreValidation.nonManifoldEdges) {
+            if (parts.coreValidation.boundaryEdges || (parts.coreValidation.nonManifoldEdges && !allowCoreEdgeCase)) {
                 blockingIssues.push(`Core B:${parts.coreValidation.boundaryEdges} N:${parts.coreValidation.nonManifoldEdges}`);
             }
             parts.surfaceGroups.forEach(part => {
@@ -1902,7 +1914,8 @@ const texturePresets = {
             const groupSummary = parts.surfaceGroups.map(part => `${part.name} ${part.meshes.length}`).join(' | ');
             const summaryBits = [`Core ${parts.coreValidation.triangles} tris`];
             if (groupSummary) summaryBits.push(groupSummary);
-            setStatus(`3MF exported | ${summaryBits.join(' | ')} | manifold check passed`);
+            const exportNote = allowCoreEdgeCase ? 'edge-case export allowed' : 'manifold check passed';
+            setStatus(`3MF exported | ${summaryBits.join(' | ')} | ${exportNote}`, allowCoreEdgeCase ? 'warn' : '');
         } catch (err) {
             console.error(err);
             setStatus("3MF export failed.", 'error');
