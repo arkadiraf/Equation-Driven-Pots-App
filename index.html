@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#3498db">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Pot Designer">
+    <meta name="description" content="Equation-driven 3D pot and vessel designer with multi-color patterns">
+    <link rel="manifest" href="manifest.json">
     <title>Multi-Color Pot Designer</title>
     <style>
         :root {
@@ -20,7 +26,7 @@
             width: 460px; background: var(--panel); padding: 25px;
             box-shadow: 2px 0 15px rgba(0,0,0,0.1); overflow-y: auto; z-index: 100; flex-shrink: 0;
         }
-        #viewer-container { flex-grow: 1; background: #ffffff; position: relative; }
+        #viewer-container { flex-grow: 1; background: #ffffff; position: relative; touch-action: none; }
         .section-title { font-size: 0.95rem; color: var(--secondary); border-bottom: 2px solid #eee; padding-bottom: 5px; margin-top: 20px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
         .input-group { margin-bottom: 10px; }
         .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
@@ -49,14 +55,31 @@
 
         /* --- COMPACT MOBILE OVERRIDES --- */
         @media (max-width: 768px) {
-            #sidebar {
-                width: 40vw;
-                min-width: 40vw;
-                padding: 8px;
+            /* 1. Stack the layout vertically instead of side-by-side */
+            body {
+                flex-direction: column-reverse; 
             }
+            
+            /* 2. Put the 3D viewer on the top 50% of the screen */
+            #viewer-container {
+                width: 100%;
+                height: 50vh; 
+                flex-grow: 0;
+            }
+            
+            /* 3. Put the controls on the bottom 50% of the screen */
+            #sidebar {
+                width: 100%;
+                height: 50vh; 
+                min-width: 100%;
+                padding: 15px;
+                box-sizing: border-box;
+            }
+            
             h2 {
                 font-size: 0.9rem !important;
                 margin: 0 0 5px 0 !important;
+            }
             }
             .section-title {
                 font-size: 0.68rem;
@@ -90,10 +113,10 @@
                 border-radius: 4px;
             }
             input[type="number"], select {
-                height: 24px;
+                height: 28px;
             }
             textarea {
-                height: 40px !important;
+                height: 50px !important;
                 font-size: 0.62rem !important;
                 margin-bottom: 4px;
                 line-height: 1.15;
@@ -114,24 +137,24 @@
                 transform: scale(1.0);
             }
             .pot-toggle label {
-                font-size: 0.62rem;
+                font-size: 0.7rem;
             }
             .pot-settings {
                 padding: 6px;
                 margin-bottom: 8px;
             }
             .color-chip {
-                height: 28px;
+                height: 32px;
                 padding: 2px;
             }
             button {
-                padding: 8px 2px !important;
-                font-size: 0.62rem !important;
+                padding: 10px 4px !important;
+                font-size: 0.7rem !important;
                 margin-top: 4px !important;
             }
             #status {
-                font-size: 9px;
-                padding: 4px 10px;
+                font-size: 10px;
+                padding: 5px 12px;
                 bottom: 10px;
                 left: 10px;
                 max-width: calc(100% - 20px);
