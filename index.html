@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    
+    <link rel="manifest" href="manifest.json">
+    
+    <meta name="theme-color" content="#3498db">
+    
     <title>Equation-Driven Pots Project</title>
     <style>
         body {
@@ -34,10 +39,11 @@
             border-radius: 8px;
             text-decoration: none;
             color: #333;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s;
         }
         .app-link:hover {
             background-color: #f0f0f0;
+            transform: translateY(-2px); /* Added a tiny lift effect on hover to make it feel premium */
         }
         .app-title {
             font-size: 1.2em;
@@ -111,4 +117,3 @@
     </div>
 </body>
 </html>
- 

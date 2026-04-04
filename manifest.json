@@ -2,7 +2,7 @@
   "name": "Multi-Color Pot Designer",
   "short_name": "Pot Designer",
   "description": "Equation-driven 3D pot and vessel designer with multi-color patterns",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#f4f7f6",
   "theme_color": "#3498db",
