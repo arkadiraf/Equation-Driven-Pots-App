@@ -2,7 +2,8 @@
 
 A generative design project that creates customizable, 3D-printable, multi-color pots driven by mathematical equations.
 
-**Live Web Tool:** Don't want to run the code locally? You can use the fully interactive web generator right in your browser here: 
+**Live Web Tool:** Don't want to run the code locally? You can use the fully interactive web generator right in your browser here:
+https://arkadiraf.github.io/Equation-Driven-Pots-App/
 
 ---
 
