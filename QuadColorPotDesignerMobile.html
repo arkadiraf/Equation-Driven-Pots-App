@@ -260,12 +260,20 @@
 
 const libraries = {
         cylindrical: {
-            "Circle (Pure Base)": { eq: "R", desc: "Simple cylindrical scaffold." },
-            "Rounded Square": { eq: "R * pow(pow(abs(cos(theta)), 8) + pow(abs(sin(theta)), 8), -0.125)", desc: "Rounded-square plan profile." },
-            "Ellipse": { eq: "R / sqrt(pow(cos(theta), 2) + 2.5 * pow(sin(theta), 2))", desc: "Elliptical cross-section." },
-            "Square Ripple": { eq: "R * pow(pow(abs(cos(theta)), 8) + pow(abs(sin(theta)), 8), -0.125) * (1 + 0.05 * sin(10 * z))", desc: "Rounded square with vertical ripple." },
             "Elliptical Twist": { eq: "R / sqrt(pow(cos(theta + z/3), 2) + 2.5 * pow(sin(theta + z/3), 2))", desc: "Ellipse twisting as it rises." },
+            "Circle (Pure Base)": { eq: "R", desc: "Simple cylindrical scaffold." },
+            "Triangle": { eq: "R * cos(pi/3) / cos((theta % (2*pi/3)) - pi/3)", desc: "Regular triangular cross-section." },
+            "Square": { eq: "R * cos(pi/4) / cos((theta % (pi/2)) - pi/4)", desc: "Regular square cross-section." },
+            "Pentagon": { eq: "R * cos(pi/5) / cos((theta % (2*pi/5)) - pi/5)", desc: "Regular pentagonal cross-section." },
+            "Hexagon": { eq: "R * cos(pi/6) / cos((theta % (pi/3)) - pi/6)", desc: "Regular hexagonal cross-section." },
+            "Ellipse": { eq: "R / sqrt(pow(cos(theta), 2) + 2.5 * pow(sin(theta), 2))", desc: "Elliptical cross-section." },
+            "Dipole (Two Petals)": { eq: "R * (1 + 0.28 * cos(2 * theta))", desc: "Two-petal / dipole profile." },
+            "3-Petal Flower": { eq: "R * (1 + 0.24 * cos(3 * theta))", desc: "Three-petal floral profile." },
+            "4-Petal Flower": { eq: "R * (1 + 0.22 * cos(4 * theta))", desc: "Four-petal floral profile." },
             "5-Petal Flower": { eq: "R * (1 + 0.25 * cos(5 * theta))", desc: "Five-petal profile." },
+
+            "Rounded Square": { eq: "R * pow(pow(abs(cos(theta)), 8) + pow(abs(sin(theta)), 8), -0.125)", desc: "Rounded-square plan profile." },
+            "Square Ripple": { eq: "R * pow(pow(abs(cos(theta)), 8) + pow(abs(sin(theta)), 8), -0.125) * (1 + 0.05 * sin(10 * z))", desc: "Rounded square with vertical ripple." },
             "Gear-like": { eq: "R * (1 + 0.08 * cos(12 * theta))", desc: "Fine radial teeth." },
             "Soft Gourd": { eq: "R * (1 + 0.10 * cos(4 * theta) + 0.05 * sin(2 * theta))", desc: "Organic gourd section." },
             "Wavy Ceramic": { eq: "R * (1 + 0.08 * cos(3 * theta) + 0.06 * sin(5 * theta))", desc: "Gentle ceramic waviness." },
@@ -293,8 +301,14 @@ const libraries = {
             "DNA Double Helix": { eq: "R + 0.5 * sin(4 * theta + z) + 0.5 * cos(4 * theta - z)", desc: "Double-helix profile." }
         },
         spherical: {
-            "Dragon Egg": { eq: "R * (1 + 0.08 * cos(10*theta + 8*phi) + 0.08 * cos(10*theta - 8*phi))", desc: "Diamond-scale scaffold." },
             "Perfect Sphere": { eq: "R", desc: "Simple spherical scaffold." },
+            "Ellipse": { eq: "R * (1 + 0.18 * cos(2 * theta) * pow(sin(phi), 1.8))", desc: "Elliptical spherical modulation around the equator." },
+            "Dipole (Two Petals)": { eq: "R * (1 + 0.24 * cos(2 * theta) * pow(sin(phi), 1.5))", desc: "Two-petal / dipole spherical form." },
+            "3-Petal Flower": { eq: "R * (1 + 0.22 * cos(3 * theta) * pow(sin(phi), 1.5))", desc: "Three-petal spherical modulation." },
+            "4-Petal Flower": { eq: "R * (1 + 0.20 * cos(4 * theta) * pow(sin(phi), 1.5))", desc: "Four-petal spherical modulation." },
+            "5-Petal Flower": { eq: "R * (1 + 0.20 * cos(5 * theta) * pow(sin(phi), 1.5))", desc: "Five-petal spherical modulation." },
+
+            "Dragon Egg": { eq: "R * (1 + 0.08 * cos(10*theta + 8*phi) + 0.08 * cos(10*theta - 8*phi))", desc: "Diamond-scale scaffold." },
             "Aerospace Isogrid": { eq: "R * (1 + 0.08 * max(cos(12*theta + 10*phi), cos(12*theta - 10*phi)))", desc: "Structural diagrid." },
             "Crown Splash": { eq: "R * (1 + 0.35 * exp(-pow(phi - 0.4, 2) * 20) * max(0, cos(14 * theta)) + 0.05 * sin(phi * 8))", desc: "Splash-like crown near top." },
             "Phased Array Lobe": { eq: "R * (1 + 0.25 * pow(sin(phi), 4) * pow(cos(4*theta), 6) + 0.03 * sin(16*theta)*sin(phi))", desc: "Antenna-lobe inspired." },
@@ -305,13 +319,11 @@ const libraries = {
             "Gravity Drip": { eq: "R * (1 + 0.2 * exp(phi - 2.5) * cos(12 * theta) * sin(phi))", desc: "Dripping lower region." },
             "Liquid Audio Interference": { eq: "R * (1 + 0.04 * sin(18*theta) * cos(22*phi) + 0.03 * sin(28*theta - 12*phi))", desc: "Interference micro-topography." },
             "Overlapping Armor Scales": { eq: "R * (1 + 0.12 * pow(max(0, sin(10*theta - 6*phi)), 2) * sin(phi))", desc: "Scale-like outer pattern." },
-            "Twisted Hex Vortex": { eq: "R * (1 + 0.15 * cos(6 * (theta + phi*2)))", desc: "Hex form with rotational drift." },
             "Ribbed Art Deco": { eq: "R * (1 + 0.15 * pow(cos(8*theta), 4) * sin(phi))", desc: "Art Deco finning." },
             "Equatorial Flare": { eq: "R * (1 + 0.4 * exp(-pow(phi-1.57, 2)*10))", desc: "Bulges near equator." },
             "Cellular Organic": { eq: "R * (1 + 0.06 * (sin(8*theta)*cos(10*phi) + sin(11*theta)*cos(5*phi)))", desc: "Organic, cellular modulation." },
             "Pumpkin Lobes": { eq: "R * (1 + 0.15 * cos(8 * theta))", desc: "Rounded lobes." },
             "Woven Basket": { eq: "R * (1 + 0.05 * sin(12 * theta) * cos(8 * phi))", desc: "Woven cross-pattern." },
-            "Starfruit": { eq: "R * (1 + 0.25 * cos(5 * theta) * sin(phi))", desc: "Five-point spherical ridges." },
             "Hourglass / Peanut": { eq: "R * (1 - 0.25 * sin(2 * phi))", desc: "Pinched midsection." },
             "Coral Brain": { eq: "R * (1 + 0.08 * sin(10 * theta + 5*phi) * sin(8 * phi))", desc: "Dense brain-coral pattern." }
         }
@@ -559,6 +571,39 @@ const texturePresets = {
             sphBotFlatten: (parseFloat(document.getElementById('sphBotFlatten').value) || 150) * (Math.PI / 180),
             sphBotCut: (parseFloat(document.getElementById('sphBotCut').value) || 175) * (Math.PI / 180)
         };
+    }
+
+
+    function slugifyName(value) {
+        return String(value || '')
+            .replace(/\s+/g, '_')
+            .replace(/[^a-zA-Z0-9_-]/g, '')
+            .replace(/_+/g, '_')
+            .replace(/^_+|_+$/g, '') || 'Custom';
+    }
+
+    function selectedOptionText(selectId, fallback = 'Custom') {
+        const el = document.getElementById(selectId);
+        if (!el || el.selectedIndex < 0) return fallback;
+        return el.options[el.selectedIndex]?.text || fallback;
+    }
+
+    function buildExportStem(cfg, includePatterns = false) {
+        const parts = [
+            cfg.isPot ? 'Pot' : 'Mesh',
+            slugifyName(cfg.sys),
+            slugifyName(selectedOptionText('presetSelect', 'Shape')),
+            slugifyName(selectedOptionText('texPresetSelect', 'Texture'))
+        ];
+
+        if (includePatterns) {
+            parts.push(
+                slugifyName(selectedOptionText('patternPresetSelect1', 'PatternA')),
+                slugifyName(selectedOptionText('patternPresetSelect2', 'PatternB'))
+            );
+        }
+
+        return parts.join('_');
     }
 
     function secureEval(eq, theta, z, phi, v, R, isTexture = false) {
@@ -1652,8 +1697,7 @@ const texturePresets = {
             const blob = new Blob([buffer], { type: 'application/octet-stream' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            const prefix = cfg.isPot ? "Pot_" : "Mesh_";
-            link.download = `${prefix}${cfg.sys}.stl`;
+            link.download = `${buildExportStem(cfg, false)}.stl`;
             link.click();
             setStatus("STL exported. STL carries geometry only, not multi-part assembly.", 'warn');
         } catch (err) {
@@ -1761,7 +1805,7 @@ const texturePresets = {
             const blob = await zip.generateAsync({ type: 'blob', mimeType: 'model/3mf' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `Pot_${cfg.sys}_dual_pattern_multipart.3mf`;
+            link.download = `${buildExportStem(cfg, true)}_multipart.3mf`;
             link.click();
 
             const groupSummary = parts.surfaceGroups.map(part => `${part.name} ${part.meshes.length}`).join(' | ');
