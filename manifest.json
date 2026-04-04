@@ -1,0 +1,16 @@
+{
+  "name": "Multi-Color Pot Designer",
+  "short_name": "Pot Designer",
+  "description": "Equation-driven 3D pot and vessel designer with multi-color patterns",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f7f6",
+  "theme_color": "#3498db",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%233498db'/%3E%3Ctext x='50' y='55' text-anchor='middle' fill='white' font-size='40'%3EP%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}
