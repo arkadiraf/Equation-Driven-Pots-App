@@ -977,10 +977,17 @@ const texturePresets = {
             for (let it = 0; it < sample.resT; it++) {
                 const surfaceActive = depthActive && sample.surfaceEligible[iv][it];
                 const state = (sample.cellMaskA[iv][it] ? 1 : 0) + (sample.cellMaskB[iv][it] ? 2 : 0);
+
                 if (surfaceActive) {
-                    coreOcc[1][iv][it] = true;
-                    surfaceOccs[state][0][iv][it] = true;
-                    stateCounts[state]++;
+                    if (state === 0) {
+                        coreOcc[0][iv][it] = true;
+                        coreOcc[1][iv][it] = true;
+                        stateCounts[0]++;
+                    } else {
+                        coreOcc[1][iv][it] = true;
+                        surfaceOccs[state][0][iv][it] = true;
+                        stateCounts[state]++;
+                    }
                 } else {
                     coreOcc[0][iv][it] = true;
                     coreOcc[1][iv][it] = true;
@@ -988,7 +995,12 @@ const texturePresets = {
             }
         }
 
-        return { coreOcc, surfaceOccs, stateCounts, hasSurface: stateCounts.some(count => count > 0) };
+        return {
+            coreOcc,
+            surfaceOccs,
+            stateCounts,
+            hasSurface: stateCounts[1] > 0 || stateCounts[2] > 0 || stateCounts[3] > 0
+        };
     }
 
     function splitOccupancyComponents(occ, resV, resT) {
@@ -1422,9 +1434,13 @@ const texturePresets = {
         });
         if (skipDrainBottom) coreMesh = appendCylindricalDrainClosure(coreMesh, sample, cfg);
 
-        const stateNames = ['Surface Base', 'Pattern A', 'Pattern B', 'Overlap'];
+        const stateNames = {
+            1: 'Pattern A',
+            2: 'Pattern B',
+            3: 'Overlap'
+        };
         const surfaceGroups = [];
-        for (let state = 0; state < 4; state++) {
+        for (let state = 1; state <= 3; state++) {
             if (occ.stateCounts[state] <= 0) continue;
 
             const componentOccs = splitOccupancyComponents(occ.surfaceOccs[state], sample.resV, sample.resT);
@@ -1755,7 +1771,16 @@ const texturePresets = {
         }
     }
 
-    function meshTo3mfObjectXml(id, name, mesh) {
+    function to3mfDisplayColor(hex) {
+        const clean = String(hex || '#000000').trim().replace('#', '').toUpperCase();
+        return `#${(clean.length >= 6 ? clean.slice(0, 6) : clean.padEnd(6, '0'))}`;
+    }
+
+    function materialBaseXml(name, colorHex) {
+        return `<m:base name="${name}" displaycolor="${to3mfDisplayColor(colorHex)}" />`;
+    }
+
+    function meshTo3mfObjectXml(id, name, mesh, pid = null, pindex = null) {
         const verticesXml = [];
         for (let i = 0; i < mesh.positions.length; i += 3) {
             verticesXml.push(`<vertex x="${(mesh.positions[i] * 10).toFixed(5)}" y="${(mesh.positions[i + 1] * 10).toFixed(5)}" z="${(mesh.positions[i + 2] * 10).toFixed(5)}" />`);
@@ -1766,8 +1791,10 @@ const texturePresets = {
             trianglesXml.push(`<triangle v1="${mesh.indices[i]}" v2="${mesh.indices[i + 1]}" v3="${mesh.indices[i + 2]}" />`);
         }
 
+        const propertyAttrs = (pid !== null && pindex !== null) ? ` pid="${pid}" pindex="${pindex}"` : '';
+
         return `
-  <object id="${id}" type="model" name="${name}">
+  <object id="${id}" type="model" name="${name}"${propertyAttrs}>
     <mesh>
       <vertices>
         ${verticesXml.join('')}
@@ -1803,14 +1830,26 @@ const texturePresets = {
             }
 
             const resources = [];
-            let nextObjectId = 1;
-            resources.push(meshTo3mfObjectXml(nextObjectId, 'Core', parts.coreMesh));
+            const materialResourceId = 1;
+            resources.push(`
+  <m:basematerials id="${materialResourceId}">
+    ${materialBaseXml('Base', cfg.baseColor)}
+    ${materialBaseXml('Pattern A', cfg.patternColor1)}
+    ${materialBaseXml('Pattern B', cfg.patternColor2)}
+    ${materialBaseXml('Overlap', cfg.overlapColor)}
+  </m:basematerials>`);
+
+            const stateToMaterialIndex = { 1: 1, 2: 2, 3: 3 };
+
+            let nextObjectId = 2;
+            resources.push(meshTo3mfObjectXml(nextObjectId, 'Base', parts.coreMesh, materialResourceId, 0));
             const componentIds = [nextObjectId];
             nextObjectId += 1;
 
             parts.surfaceGroups.forEach(part => {
                 if (!part.mergedMesh.indices.length) return;
-                resources.push(meshTo3mfObjectXml(nextObjectId, part.name, part.mergedMesh));
+                const materialIndex = Object.prototype.hasOwnProperty.call(stateToMaterialIndex, part.state) ? stateToMaterialIndex[part.state] : null;
+                resources.push(meshTo3mfObjectXml(nextObjectId, part.name, part.mergedMesh, materialResourceId, materialIndex));
                 componentIds.push(nextObjectId);
                 nextObjectId += 1;
             });
@@ -1825,7 +1864,10 @@ const texturePresets = {
   </object>`);
 
             const modelXml = `<?xml version="1.0" encoding="UTF-8"?>
-<model unit="millimeter" xml:lang="en-US" xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02">
+<model unit="millimeter" xml:lang="en-US"
+       xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02"
+       xmlns:m="http://schemas.microsoft.com/3dmanufacturing/material/2015/02"
+       requiredextensions="m">
   <resources>
     ${resources.join('')}
   </resources>
