@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#3498db">
-    
+
     <title>Equation-Driven Pots Project</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 800px;
+            max-width: 860px;
             margin: 0 auto;
             padding: 20px;
             background-color: #f4f7f6;
@@ -18,37 +18,67 @@
         h1 {
             text-align: center;
             color: #3498db;
+            margin-bottom: 10px;
         }
         .description {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 26px;
+            color: #556;
+        }
+        .section-label {
+            margin: 30px 0 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #607080;
         }
         .apps {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
         }
         .app-link {
             display: block;
             padding: 20px;
             background-color: #ffffff;
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: 10px;
             text-decoration: none;
             color: #333;
-            transition: background-color 0.3s, transform 0.2s;
+            transition: background-color 0.25s, transform 0.18s, box-shadow 0.25s;
         }
         .app-link:hover {
-            background-color: #f0f0f0;
-            transform: translateY(-2px); /* Added a tiny lift effect on hover to make it feel premium */
+            background-color: #f8fbfd;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
+        .app-link.primary {
+            border: 2px solid #3498db;
+            background: linear-gradient(180deg, #ffffff 0%, #f4faff 100%);
+        }
+        .badge {
+            display: inline-block;
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 0.03em;
+            background: #3498db;
+            color: white;
+        }
+        .badge.legacy {
+            background: #7f8c8d;
         }
         .app-title {
-            font-size: 1.2em;
+            font-size: 1.22em;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         .app-description {
             color: #666;
+            line-height: 1.4;
         }
         .github-link {
             text-align: center;
@@ -63,55 +93,69 @@
         }
         @media (max-width: 768px) {
             body {
-                padding: 10px;
+                padding: 12px;
             }
             h1 {
                 font-size: 1.5em;
             }
             .description {
-                font-size: 0.9em;
+                font-size: 0.92em;
+                margin-bottom: 20px;
             }
             .app-link {
-                padding: 15px;
+                padding: 16px;
             }
             .app-title {
-                font-size: 1.1em;
+                font-size: 1.08em;
             }
             .app-description {
-                font-size: 0.85em;
+                font-size: 0.88em;
             }
         }
     </style>
 </head>
 <body>
     <h1>Equation-Driven Pots</h1>
-    <p class="description">Explore our collection of 3D pot and vessel designers powered by mathematical equations. Create unique, customizable designs for 3D printing.</p>
-    
+    <p class="description">Explore browser-based tools for designing 3D-printable pots, vessels, plates, and experimental mathematical forms.</p>
+
+    <div class="section-label">Recommended</div>
+    <div class="apps">
+        <a href="https://arkadiraf.github.io/Equation-Driven-Pots/" class="app-link primary">
+            <div class="badge">New Unified GUI</div>
+            <div class="app-title">Equation Driven Pot Designer</div>
+            <div class="app-description">The main all-in-one designer for the project. Build pots, plates, and pot+plate assemblies with base scaffold, structural geometry, surface texture, dual color-mask patterns, field modifiers, and field distortion.</div>
+        </a>
+    </div>
+
+    <div class="section-label">Legacy / Development Tools</div>
     <div class="apps">
         <a href="./TexturePotDesignerMobile.html?v=2" class="app-link">
+            <div class="badge legacy">Legacy Tool</div>
             <div class="app-title">Texture Pot Designer</div>
             <div class="app-description">Design pots with surface textures and pattern-based detail.</div>
         </a>
-        
+
         <a href="./QuadColorPotDesignerMobile.html?v=6" class="app-link">
+            <div class="badge legacy">Legacy Tool</div>
             <div class="app-title">Quad Color Pot Designer</div>
             <div class="app-description">Create pots with four-color pattern layering and advanced equation-driven forms.</div>
         </a>
-        
+
         <a href="./NonlinearFieldPotDesigner.html?v=2" class="app-link">
+            <div class="badge legacy">Experimental Legacy Tool</div>
             <div class="app-title">Nonlinear Field Pot Designer</div>
             <div class="app-description">Explore nonlinear fields, advanced equation-driven forms, and experimental shape generation.</div>
-            <div class="app-description">Experimental: some parameter combinations may produce invalid geometry.</div>
+            <div class="app-description">Some parameter combinations may produce invalid geometry.</div>
         </a>
-        
+
         <a href="./SweepDesignerMobile.html?v=2" class="app-link">
             <div class="app-title">Sweep Designer</div>
             <div class="app-description">Design swept forms and more complex spatial geometries.</div>
         </a>
     </div>
-    
+
     <div class="github-link">
-        <a href="https://github.com/arkadiraf/Equation-Driven-Pots" target="_blank">View on GitHub</a>
+        <a href="https://github.com/arkadiraf/Equation-Driven-Pots" target="_blank">View main project on GitHub</a>
     </div>
 </body>
 </html>
